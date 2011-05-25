@@ -1,0 +1,53 @@
+# common backup files
+*~
+*.swp
+*.old
+*.bak
+._*
+
+# directory files
+*.directory
+.DS_Store
+
+# eclipse
+.settings
+.buildpath
+.classpath
+.project
+.scala_dependencies
+.pmd
+.pydevproject
+*.pyc
+
+# idea
+.idea
+*.ipr
+*.iws
+*.iml
+
+# log files and folders
+logs
+*.log
+
+# netbeans
+nbproject
+project.xml
+
+# maven
+release.properties
+pom.xml.releaseBackup
+
+/target
+/src/main/latex/*-blx.bib
+/src/main/latex/*.aux
+/src/main/latex/*.bbl
+/src/main/latex/*.blg
+/src/main/latex/*.lof
+/src/main/latex/*.mp
+/src/main/latex/*.pdf
+/src/main/latex/*.tmp
+/src/main/latex/*.tui
+/src/main/latex/*.tuo
+/src/main/latex/*.run.xml
+/src/main/latex/*.synctex.gz
+
