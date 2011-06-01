@@ -28,8 +28,6 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         view = new SurfaceView(context);
         addView(view);
 
-        // Install a SurfaceHolder.Callback so we get notified when the
-        // underlying surface is created and destroyed.
         holder = view.getHolder();
         holder.addCallback(this);
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
