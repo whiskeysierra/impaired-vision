@@ -10,25 +10,18 @@ import android.view.WindowManager;
 public class ImpairedVision extends Activity {
     
     private Preview preview;
-    private Camera camera;
+    private Camera camera = Camera.open();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        final Window window = getWindow();
+        window.requestFeature(Window.FEATURE_NO_TITLE);
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         preview = new Preview(this);
         setContentView(preview);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        camera = Camera.open();
-        preview.setCamera(camera);
     }
 
     @Override
@@ -40,6 +33,14 @@ public class ImpairedVision extends Activity {
             camera.release();
             camera = null;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        camera = Camera.open();
+        preview.setCamera(camera);
     }
 
 }

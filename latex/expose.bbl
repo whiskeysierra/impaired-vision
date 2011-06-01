@@ -1,0 +1,92 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 0.9 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{android}{online}{}
+  \field{sortinit}{A}
+  \field{title}{Android Developers}
+  \verb{url}
+  \verb http://developer.android.com/
+  \endverb
+  \field{month}{05}
+  \field{year}{2011}
+\endentry
+
+\entry{gizmodo}{online}{}
+  \name{author}{1}{%
+    {{Hannaford}{H.}%
+     {Kat}{K.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{HK1}
+  \strng{fullhash}{HK1}
+  \field{sortinit}{H}
+  \field{title}{Watch Live (Augmented Reality) Video at Wimbledon Even If
+  You’ve Got Crummy Seats}
+  \verb{url}
+  \verb http://gizmodo.com/5563755/wimbledon-augmented-reality-app-shows-live-v
+  \verb ideo-of-matches
+  \endverb
+  \field{month}{05}
+  \field{year}{2011}
+\endentry
+
+\entry{ichbinfarbenblind}{online}{}
+  \field{sortinit}{I}
+  \field{title}{ichbinfarbenblind.de}
+  \verb{url}
+  \verb http://www.ichbinfarbenblind.de/
+  \endverb
+  \field{month}{05}
+  \field{year}{2011}
+\endentry
+
+\entry{wp-rotgruen}{online}{}
+  \field{sortinit}{R}
+  \field{title}{Rot-Grün-Sehschwäche}
+  \verb{url}
+  \verb http://de.wikipedia.org/wiki/Rot-Gr%C3%BCn-Sehschw%C3%A4che
+  \endverb
+  \field{month}{05}
+  \field{year}{2011}
+\endentry
+
+\entry{kurzsichtig}{online}{}
+  \field{sortinit}{S}
+  \field{title}{Simulator für Kurzsichtigkeit}
+  \verb{url}
+  \verb http://www.spirig-augen.ch/artisan_myopiesimulator.htm
+  \endverb
+  \field{month}{05}
+  \field{year}{2011}
+\endentry
+
+\entry{vischeck}{online}{}
+  \field{sortinit}{V}
+  \field{title}{vischeck.com}
+  \verb{url}
+  \verb http://www.vischeck.com/
+  \endverb
+  \field{month}{05}
+  \field{year}{2011}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

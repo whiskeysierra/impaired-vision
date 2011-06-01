@@ -12,17 +12,12 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
 
-/**
- * A simple wrapper around a Camera and a SurfaceView that renders a centered preview of the Camera
- * to the surface. We need to center the SurfaceView because not all devices have cameras that
- * support preview sizes at the same aspect ratio as the device's display.
- */
 class Preview extends ViewGroup implements SurfaceHolder.Callback {
     
     private final String TAG = "Preview";
 
-    private SurfaceView view;
-    private SurfaceHolder holder;
+    private final SurfaceView view;
+    private final SurfaceHolder holder;
     private Size size;
     private List<Size> supportedSizes;
     private Camera camera;
@@ -48,18 +43,20 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
         }
     }
 
-    public void switchCamera(Camera c) {
-       setCamera(c);
+    public void switchCamera(Camera newCamera) {
+       setCamera(newCamera);
+       
        try {
-           c.setPreviewDisplay(holder);
+           newCamera.setPreviewDisplay(holder);
        } catch (IOException exception) {
            Log.e(TAG, "IOException caused by setPreviewDisplay()", exception);
        }
-       Camera.Parameters parameters = c.getParameters();
+       
+       final Camera.Parameters parameters = newCamera.getParameters();
        parameters.setPreviewSize(size.width, size.height);
        requestLayout();
 
-       c.setParameters(parameters);
+       newCamera.setParameters(parameters);
     }
 
     @Override
@@ -86,6 +83,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 
             int previewWidth = width;
             int previewHeight = height;
+            
             if (size != null) {
                 previewWidth = size.width;
                 previewHeight = size.height;
@@ -106,8 +104,7 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        // The Surface has been created, acquire the camera and tell it where
-        // to draw.
+        // The Surface has been created, acquire the camera and tell it where to draw.
         try {
             if (camera != null) {
                 camera.setPreviewDisplay(holder);
@@ -124,7 +121,6 @@ class Preview extends ViewGroup implements SurfaceHolder.Callback {
             camera.stopPreview();
         }
     }
-
 
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
         final double ASPECT_TOLERANCE = 0.1;
