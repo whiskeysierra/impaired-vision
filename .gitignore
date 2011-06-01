@@ -38,6 +38,7 @@ release.properties
 pom.xml.releaseBackup
 
 /target
+/gen
 /src/main/latex/*-blx.bib
 /src/main/latex/*.aux
 /src/main/latex/*.bbl
