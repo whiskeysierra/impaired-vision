@@ -38,19 +38,21 @@ release.properties
 pom.xml.releaseBackup
 
 /target
+/bin
 /gen
-/src/main/latex/*-blx.bib
-/src/main/latex/*.aux
-/src/main/latex/*.bbl
-/src/main/latex/*.blg
-/src/main/latex/*.lof
-/src/main/latex/*.mp
-/src/main/latex/*.pdf
-/src/main/latex/*.tmp
-/src/main/latex/*.toc
-/src/main/latex/*.top
-/src/main/latex/*.tui
-/src/main/latex/*.tuo
-/src/main/latex/*.run.xml
-/src/main/latex/*.synctex.gz
+/latex/*-blx.bib
+/latex/*.aux
+/latex/*.bbl
+/latex/*.blg
+/latex/*.fdb_latexmk
+/latex/*.lof
+/latex/*.mp
+/latex/*.pdf
+/latex/*.tmp
+/latex/*.toc
+/latex/*.top
+/latex/*.tui
+/latex/*.tuo
+/latex/*.run.xml
+/latex/*.synctex.gz
 
