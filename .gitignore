@@ -39,6 +39,7 @@ pom.xml.releaseBackup
 
 /target
 /bin
+/out
 /gen
 /latex/*-blx.bib
 /latex/*.aux
