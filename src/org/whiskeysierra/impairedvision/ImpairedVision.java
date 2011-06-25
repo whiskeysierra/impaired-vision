@@ -3,18 +3,21 @@ package org.whiskeysierra.impairedvision;
 import android.app.Activity;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toast;
 import com.google.common.collect.Ordering;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ImpairedVision extends Activity implements SurfaceHolder.Callback {
 
+    private static final Logger LOG = LoggerFactory.getLogger(ImpairedVision.class);
+
     private Camera camera;
-    private boolean inPreview;
+    private Disorder disorder = new Myopia();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,64 +31,32 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-        camera = Camera.open();
-        camera.setPreviewCallback(new FilterCallback());
+    public void surfaceCreated(SurfaceHolder holder) {
+        if (camera == null) {
+            camera = Camera.open();
+            disorder.applyTo(camera);
+            try {
+                camera.setPreviewDisplay(holder);
+                camera.startPreview();
+            } catch (IOException e) {
+                camera.release();
+                camera = null;
+            }
+        }
     }
 
     @Override
-    public void onPause() {
-        if (inPreview) {
-            camera.stopPreview();
-        }
-
-        camera.release();
-        camera = null;
-        inPreview = false;
-
-        super.onPause();
-    }
-
-    private Camera.Size getBestPreviewSize(double width, double height, Camera.Parameters parameters) {
-        final List<Camera.Size> sizes = parameters.getSupportedPreviewSizes();
-        final Ordering<Camera.Size> ordering = new AspectRatioOrdering(width / height);
-        return ordering.min(sizes);
-    }
-
-    public void surfaceCreated(SurfaceHolder holder) {
-        if (camera == null) {
-            return;
-        } else {
-            try {
-                camera.setPreviewDisplay(holder);
-            } catch (Throwable t) {
-                Log.e("ImpairedVision-surfaceCallback", "Exception in setPreviewDisplay()", t);
-                Toast.makeText(ImpairedVision.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        if (camera == null) {
-            return;
-        } else {
-            final Camera.Parameters parameters = camera.getParameters();
-            final Camera.Size size = getBestPreviewSize(width, height, parameters);
 
-            if (size == null) {
-                return;
-            } else {
-                parameters.setPreviewSize(size.width, size.height);
-                camera.setParameters(parameters);
-                camera.startPreview();
-                inPreview = true;
-            }
-        }
     }
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-
+        if (camera != null) {
+            camera.stopPreview();
+            camera.setPreviewCallback(null);
+            camera.release();
+            camera = null;
+        }
     }
 
 }

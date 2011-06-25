@@ -1,13 +1,16 @@
 package org.whiskeysierra.impairedvision;
 
 import android.hardware.Camera;
-import android.util.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FilterCallback implements Camera.PreviewCallback {
 
+    private static final Logger LOG = LoggerFactory.getLogger(FilterCallback.class);
+
     @Override
     public void onPreviewFrame(byte[] bytes, Camera camera) {
-        Log.d("ImpairedVision", "We got a frame here!");
+        LOG.debug("We got a frame here!");
     }
 
 }
