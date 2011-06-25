@@ -5,12 +5,10 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import com.google.common.collect.Ordering;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.util.List;
 
 public class ImpairedVision extends Activity implements SurfaceHolder.Callback {
 
@@ -31,13 +29,29 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback {
     }
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder) {
+    protected void onResume() {
+        super.onResume();
         if (camera == null) {
             camera = Camera.open();
-            disorder.applyTo(camera);
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        if (camera != null) {
+            camera.release();
+            camera = null;
+        }
+        super.onPause();
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        if (camera != null) {
             try {
                 camera.setPreviewDisplay(holder);
                 camera.startPreview();
+                disorder.applyTo(camera);
             } catch (IOException e) {
                 camera.release();
                 camera = null;
@@ -50,10 +64,10 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback {
 
     }
 
+    @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         if (camera != null) {
             camera.stopPreview();
-            camera.setPreviewCallback(null);
             camera.release();
             camera = null;
         }
