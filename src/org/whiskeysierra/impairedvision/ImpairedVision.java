@@ -118,7 +118,7 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
             case dialog: {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-                builder.setTitle("Choose disorder");
+                builder.setTitle("Choose vision");
 
                 final CharSequence[] items = Iterables.toArray(Iterables.transform(visions, Vision.NAME), CharSequence.class);
                 builder.setItems(items, new DialogInterface.OnClickListener() {
