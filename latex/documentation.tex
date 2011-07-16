@@ -1,23 +1,31 @@
 \documentclass[a4paper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{fullpage}
+\usepackage{csquotes}
 \usepackage[ngerman]{babel}
 \usepackage{biblatex}
-\bibliography{documentation.bib}
+\usepackage{float}
 \usepackage{graphicx}
 \usepackage{subfigure}
+\usepackage{hyperref}
+\bibliography{documentation.bib}
 \title{Augmented Reality Simulator für Sehstörungen}
 \author{Willi Schönborn}
 \date{\today}
 \begin{document}
+
+\begin{figure}[H]
+\centering
+\includegraphics{beuth.png}
 \maketitle
+\end{figure}
 
 \section*{Einleitung}
-Als Teil der Lehrveranstaltung \textit{Multimediatechnik Vertiefung} an der \textit{Beuth Hochschule für Technik Berlin} soll im Rahmen einer Semesterarbeit ein Projekt mit Bezügen zu den Bereichen Multimedia und Wahrnehmung entstehen. Das Ziel dieses Dokumentes ist es, die Ideen und Konzepte für dieses Projekt vorzustellen.
+Als Teil der Lehrveranstaltung \textit{Multimediatechnik Vertiefung} an der \textit{Beuth Hochschule für Technik Berlin} soltel im Rahmen einer Semesterarbeit ein Projekt mit Bezügen zu den Bereichen Multimedia und Wahrnehmung entstehen. Das Ziel dieses Dokumentes ist es die Ideen, Konzepte sowie die Ergebnisse dieses Projektes vorzustellen.
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \centering
-\includegraphics[width=0.45\textwidth]{500x_ibm-seer.jpg}
+\includegraphics[width=0.45\textwidth]{augmented-reality.jpg}
 \caption{Augmented Reality}
 \end{figure}
 
@@ -25,13 +33,22 @@ Als Teil der Lehrveranstaltung \textit{Multimediatechnik Vertiefung} an der \tex
 
 Die Idee ist es, eine Android-Applikation zu entwickeln, die mithilfe der Handy-Kamera einen virtuellen Blick auf die Welt erlaubt und dabei diverse Sehstörungen simulieren kann. Das Design sowie die Benutzerschnittstelle sollten dabei so minimal wie möglich gehalten werden. Der gesamte Bildschirm stellt das aktuelle Bild der Kamera da, natürlich entsprechend modifiziert, je nach gewählter Sehstörung. Die verschiedenen Simulationen könnten beispielsweise einfach durch das Kontextmenü auswählbar sein. Mögliche Kandidaten für die Sehstörungen, die simuliert werden können sind Rot-Grün-Sehschwäche, Gelb-Blau-Sehschwäche sowie Kurzsichtigkeit. 
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \centering
 \subfigure[Normalsichtigkeit]{
-    \includegraphics[width=0.3\textwidth]{leaves.jpg}
+    \includegraphics[width=0.45\textwidth]{balloons.jpg}
 }
-\subfigure[Rot-Grün-Schwäche]{
-    \includegraphics[width=0.3\textwidth]{leavessim.jpg}
+\subfigure[Protanopie]{
+    \includegraphics[width=0.45\textwidth]{balloons-protanope.jpg}
+}
+\subfigure[Deuteranopie]{
+    \includegraphics[width=0.45\textwidth]{balloons-deuteranope.jpg}
+}
+\subfigure[Tritanopie]{
+    \includegraphics[width=0.45\textwidth]{balloons-tritanope.jpg}
+}
+\subfigure[Achromasie]{
+    \includegraphics[width=0.45\textwidth]{balloons-achromate.jpg}
 }
 \caption{Vergleich}
 \end{figure}
