@@ -4,7 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.*;
+import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
@@ -124,9 +125,7 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
                     public void onClick(DialogInterface dialog, int i) {
                         final Vision selected = visions.get(i);
 
-                        if (current == selected) {
-                            LOG.debug("Selected vision is already in use");
-                        } else {
+                        if (current != selected) {
                             current = visions.get(i);
                             LOG.debug("Switched to {}", current);
                             current.configure(camera);

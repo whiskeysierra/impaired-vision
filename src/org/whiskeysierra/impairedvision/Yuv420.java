@@ -1,6 +1,5 @@
 package org.whiskeysierra.impairedvision;
 
-import android.graphics.BitmapRegionDecoder;
 import com.google.common.base.Preconditions;
 
 public class Yuv420 {
