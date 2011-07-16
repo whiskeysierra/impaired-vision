@@ -4,7 +4,7 @@ import android.hardware.Camera;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class FilterCallback implements Camera.PreviewCallback {
+class FilterCallback implements Camera.PreviewCallback {
 
     private static final Logger LOG = LoggerFactory.getLogger(FilterCallback.class);
 

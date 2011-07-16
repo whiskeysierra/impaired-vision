@@ -3,15 +3,7 @@ package org.whiskeysierra.impairedvision;
 import android.graphics.ColorFilter;
 import android.hardware.Camera;
 
-public class NormalVision implements Vision {
-
-    @Override
-    public void configure(Camera camera) {
-        final Camera.Parameters parameters = camera.getParameters();
-        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-        camera.setParameters(parameters);
-        camera.autoFocus(AutoFocusCallbacks.NOOP);
-    }
+public class NormalVision extends AbstractVision {
 
     @Override
     public ColorFilter getFilter() {
@@ -22,4 +14,5 @@ public class NormalVision implements Vision {
     public String getName() {
         return "Normal Vision";
     }
+
 }

@@ -28,12 +28,14 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
     private SurfaceHolder holder;
     private Camera.Size size;
 
-    private ImmutableList<Vision> visions = ImmutableList.of(
-        new NormalVision(),
-        new Myopia(),
-        new RedGreenDeficiency(),
-        new BlueYellowDeficiency(),
-        new ColorBlindness()
+    private final ImmutableList<Vision> visions = ImmutableList.of(
+            new NormalVision(),
+            new Myopia(),
+            new Protanopia(),
+            new Deuteranopia(),
+            new Tritanopia(),
+            new Achromatopia(),
+            new AchromatopiaAndMyopia()
     );
 
     private Vision current = visions.get(0);
