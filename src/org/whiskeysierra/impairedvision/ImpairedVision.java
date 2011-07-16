@@ -20,7 +20,7 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
 
     private static final Logger LOG = LoggerFactory.getLogger(ImpairedVision.class);
 
-    private final int diseaseChooser = 0;
+    private final int dialog = 0;
 
     private Camera camera;
     private SurfaceView preview;
@@ -30,7 +30,9 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
     private ImmutableList<Vision> visions = ImmutableList.of(
         new NormalVision(),
         new Myopia(),
-        new RedGreenDeficiency()
+        new RedGreenDeficiency(),
+        new BlueYellowDeficiency(),
+        new ColorBlindness()
     );
 
     private Vision current = visions.get(0);
@@ -48,13 +50,12 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
 
         holder = preview.getHolder();
         holder.addCallback(this);
-        holder.setType(SurfaceHolder.SURFACE_TYPE_NORMAL);
 
         preview.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                showDialog(diseaseChooser);
+                showDialog(dialog);
             }
 
         });
@@ -111,7 +112,7 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
     @Override
     protected Dialog onCreateDialog(int id) {
         switch (id) {
-            case diseaseChooser: {
+            case dialog: {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
                 builder.setTitle("Choose disorder");
@@ -150,11 +151,9 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
         Canvas canvas = null;
 
         try {
-            synchronized (holder) {
-                canvas = holder.lockCanvas(null);
-                Yuv420.decode(yuv, rgb, size.width, size.height);
-                canvas.drawBitmap(rgb, 0, size.width, 0, 0, size.width, size.height, false, paint);
-            }
+            canvas = holder.lockCanvas(null);
+            Yuv420.decode(yuv, rgb, size.width, size.height);
+            canvas.drawBitmap(rgb, 0, size.width, 0, 0, size.width, size.height, false, paint);
         } finally {
             if (canvas != null) {
                 holder.unlockCanvasAndPost(canvas);

@@ -4,12 +4,12 @@ import android.graphics.ColorFilter;
 import android.graphics.ColorMatrixColorFilter;
 import android.hardware.Camera;
 
-public class RedGreenDeficiency implements Vision {
+public class BlueYellowDeficiency implements Vision {
 
     private final ColorMatrixColorFilter filter = new ColorMatrixColorFilter(new float[]{
             0.5f, 0.5f, 0.0f, 0.0f, 0.0f,
-            0.5f, 0.5f, 0.0f, 0.0f, 0.0f,
-            0.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+            0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+            0.5f, 0.0f, 0.5f, 0.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
     });
 
@@ -28,6 +28,6 @@ public class RedGreenDeficiency implements Vision {
 
     @Override
     public String getName() {
-        return "Red-Green-Deficiency";
+        return "Blue-Yellow-Deficiency";
     }
 }
