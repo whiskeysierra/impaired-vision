@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Canvas;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -17,8 +15,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 public class ImpairedVision extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback {
 
@@ -29,17 +25,18 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
     private Camera camera;
     private SurfaceView preview;
     private SurfaceHolder holder;
+    private Camera.Size size;
 
-    private ImmutableList<Disorder> disorders = ImmutableList.of(
+    private ImmutableList<Vision> visions = ImmutableList.of(
         new NormalVision(),
         new Myopia(),
         new RedGreenDeficiency()
     );
-    private Iterable<String> disorderNames = Iterables.transform(disorders, Disorder.NAME);
-    private Disorder current = disorders.get(0);
 
-    private byte[] rgbbuffer = new byte[256 * 256];
-    private int[] rgbints = new int[256 * 256];
+    private Vision current = visions.get(0);
+
+    private int[] rgb;
+    private final Paint paint = new Paint();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +48,6 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
 
         holder = preview.getHolder();
         holder.addCallback(this);
-        //holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         holder.setType(SurfaceHolder.SURFACE_TYPE_NORMAL);
 
         preview.setOnClickListener(new View.OnClickListener() {
@@ -69,12 +65,15 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
         super.onResume();
         if (camera == null) {
             camera = Camera.open();
+            size = camera.getParameters().getPreviewSize();
         }
     }
 
     @Override
     protected void onPause() {
         if (camera != null) {
+            camera.setPreviewCallback(null);
+            camera.stopPreview();
             camera.release();
             camera = null;
         }
@@ -86,15 +85,10 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
         if (camera != null) {
             synchronized (this) {
                 preview.setWillNotDraw(false);
-//                try {
-                    //camera.setPreviewDisplay(holder);
-                    camera.startPreview();
-                    current.applyTo(camera);
-                    camera.setPreviewCallback(this);
-//                } catch (IOException e) {
-//                    camera.release();
-//                    camera = null;
-//                }
+                camera.startPreview();
+                current.configure(camera);
+                rgb = new int[size.width * size.height];
+                camera.setPreviewCallback(this);
             }
         }
     }
@@ -107,6 +101,7 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         if (camera != null) {
+            camera.setPreviewCallback(null);
             camera.stopPreview();
             camera.release();
             camera = null;
@@ -121,19 +116,20 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
 
                 builder.setTitle("Choose disorder");
 
-                final CharSequence[] items = Iterables.toArray(disorderNames, CharSequence.class);
+                final CharSequence[] items = Iterables.toArray(Iterables.transform(visions, Vision.NAME), CharSequence.class);
                 builder.setItems(items, new DialogInterface.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int i) {
-                        final Disorder selected = disorders.get(i);
+                        final Vision selected = visions.get(i);
 
                         if (current == selected) {
-                            LOG.debug("Selected disorder is already in use");
+                            LOG.debug("Selected vision is already in use");
                         } else {
-                            current = disorders.get(i);
+                            current = visions.get(i);
                             LOG.debug("Switched to {}", current);
-                            current.applyTo(camera);
+                            current.configure(camera);
+                            paint.setColorFilter(current.getFilter());
                         }
                     }
 
@@ -148,46 +144,20 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
     }
 
     @Override
-    public void onPreviewFrame(byte[] bytes, Camera camera) {
-        Log.d("Camera", "Got a camera frame");
+    public void onPreviewFrame(byte[] yuv, Camera camera) {
+        if (holder == null) return;
 
-        Canvas c = null;
-
-        if (holder == null) {
-            return;
-        }
+        Canvas canvas = null;
 
         try {
             synchronized (holder) {
-                c = holder.lockCanvas(null);
-
-                // Do your drawing here
-                // So this data value you're getting back is formatted in YUV format and you can't do much
-                // with it until you convert it to rgb
-                int bwCounter = 0;
-                int yuvsCounter = 0;
-                for (int y = 0; y < 160; y++) {
-                    System.arraycopy(bytes, yuvsCounter, rgbbuffer, bwCounter, 240);
-                    yuvsCounter = yuvsCounter + 240;
-                    bwCounter = bwCounter + 256;
-                }
-
-                for (int i = 0; i < rgbints.length; i++) {
-                    rgbints[i] = (int) rgbbuffer[i];
-                }
-
-                //decodeYUV(rgbbuffer, data, 100, 100);
-                c.drawBitmap(rgbints, 0, 256, 0, 0, 256, 256, false, new Paint());
-
-                Log.d("SOMETHING", "Got Bitmap");
-
+                canvas = holder.lockCanvas(null);
+                Yuv420.decode(yuv, rgb, size.width, size.height);
+                canvas.drawBitmap(rgb, 0, size.width, 0, 0, size.width, size.height, false, paint);
             }
         } finally {
-            // do this in a finally so that if an exception is thrown
-            // during the above, we don't leave the Surface in an
-            // inconsistent state
-            if (c != null) {
-                holder.unlockCanvasAndPost(c);
+            if (canvas != null) {
+                holder.unlockCanvasAndPost(canvas);
             }
         }
     }
