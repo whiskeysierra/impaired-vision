@@ -191,17 +191,17 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
                 if (size.width < width && size.height < height) {
                     final float bitmapRatio = (float) size.width / (float) size.height;
 
+                    final float scale;
+
                     if (bitmapRatio < ratio) {
-                        final float scale = height / (float) size.height;
-                        canvas.scale(scale, scale);
-                        x = 0;
-                        y = 0;
+                        scale = height / (float) size.height;
                     } else {
-                        final float scale = width / (float) size.width;
-                        canvas.scale(scale, scale);
-                        x = 0;
-                        y = 0;
+                        scale = width / (float) size.width;
                     }
+
+                    canvas.scale(scale, scale, canvas.getWidth() / 2f, canvas.getHeight() / 2f);
+                    x = width / 2f - size.width / 2f;
+                    y = height / 2f - size.height / 2f;
                 } else {
                     x = 0;
                     y = 0;

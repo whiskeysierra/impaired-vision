@@ -2,8 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
             android:key="sizeIndex"
-            android:title="Preview size"
-            android:summary="Camera preview size in pixels"
+            android:title="Preview resolution"
+            android:summary="Change to improve performance"
             android:defaultValue="@string/defaultSizeIndex"/>
     <CheckBoxPreference
             android:key="skipFrames"
