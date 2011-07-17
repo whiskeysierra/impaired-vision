@@ -6,5 +6,5 @@
         <intent android:action="android.intent.action.VIEW"
                 android:data="http://www.github.com/whiskeysierra/impaired-vision"/>
     </Preference>
-    <Preference android:title="Application version" android:summary="0.1.0-beta" android:enabled="false"/>
+    <Preference android:title="Application version" android:summary="@string/version" android:enabled="false"/>
 </PreferenceScreen>
