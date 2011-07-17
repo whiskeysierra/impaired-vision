@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <Preference android:title="Author" android:summary="Willi Schönborn"/>
-    <Preference android:title="Version" android:summary="0.1.0-beta"/>
     <Preference android:title="Copyright" android:summary="© 2011 Willi Schönborn"/>
-    <Preference android:title="Website" android:summary="github.com/whiskeysierra/impaired-vision"/>
+    <Preference android:title="Website" android:summary="github.com/whiskeysierra/impaired-vision">
+        <intent android:action="android.intent.action.VIEW"
+                android:data="http://www.github.com/whiskeysierra/impaired-vision"/>
+    </Preference>
+    <Preference android:title="Application version" android:summary="0.1.0-beta" android:enabled="false"/>
 </PreferenceScreen>

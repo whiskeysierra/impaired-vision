@@ -44,30 +44,29 @@ final class Yuv420 {
                     }
                 }
 
-                int r = y + cr + (cr >> 2) + (cr >> 3) + (cr >> 5);
-                if (r < 0) {
-                    r = 0;
-                } else if (r > 255) {
-                    r = 255;
-                }
-
-                int g = y - (cb >> 2) + (cb >> 4) + (cb >> 5) - (cr >> 1) + (cr >> 3) + (cr >> 4) + (cr >> 5);
-                if (g < 0) {
-                    g = 0;
-                } else if (g > 255) {
-                    g = 255;
-                }
-
-                int b = y + cb + (cb >> 1) + (cb >> 2) + (cb >> 6);
-                if (b < 0) {
-                    b = 0;
-                } else if (b > 255) {
-                    b = 255;
-                }
+                int r = r(y, cr);
+                int g = g(y, cr, cb);
+                int b = b(y, cb);
 
                 rgb[index++] = 0xff000000 + (b << 16) + (g << 8) + r;
             }
         }
+    }
+
+    private static int limit(int c) {
+        return Math.max(0, Math.min(c, 255));
+    }
+
+    private static int r(int y, int cr) {
+        return limit(y + cr + (cr >> 2) + (cr >> 3) + (cr >> 5));
+    }
+
+    private static int g(int y, int cr, int cb) {
+        return limit(y - (cb >> 2) + (cb >> 4) + (cb >> 5) - (cr >> 1) + (cr >> 3) + (cr >> 4) + (cr >> 5));
+    }
+
+    private static int b(int y, int cb) {
+        return limit(y + cb + (cb >> 1) + (cb >> 2) + (cb >> 6));
     }
 
 }

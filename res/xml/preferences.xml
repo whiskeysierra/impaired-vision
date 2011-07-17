@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="Performance">
-        <CheckBoxPreference
-            android:key="skipFrames"
-            android:title="Enable frame skipping"
-            android:summaryOff="All frames will be used"
-            android:summaryOn="Some frames will be dropped"
-            android:defaultValue="false"/>
-        <ListPreference android:key="skipRate"
-            android:title="Frame skipping rate"
-            android:summary="The percentage of frames that will be skipped to improve performance"
-            android:defaultValue="25"
-            android:entries="@array/skipRates"
-            android:entryValues="@array/skipRateValues"
-            android:dependency="skipFrames"/>
-    </PreferenceCategory>
+<PreferenceScreen>
+    <CheckBoxPreference
+        key="skipFrames"
+        title="Enable frame skipping"
+        summaryOff="All frames will be used"
+        summaryOn="Some frames will be dropped"
+        defaultValue="false"/>
+    <ListPreference key="skipRate"
+        title="Frame skipping rate"
+        summary="The percentage of frames that will be skipped to improve performance"
+        defaultValue="25"
+        entries="@array/skipRates"
+        entryValues="@array/skipRateValues"
+        dependency="skipFrames"/>
 </PreferenceScreen>

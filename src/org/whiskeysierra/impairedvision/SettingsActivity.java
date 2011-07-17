@@ -17,4 +17,5 @@ public final class SettingsActivity extends PreferenceActivity {
         OptionsMenu.createMenu(this, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
 }
