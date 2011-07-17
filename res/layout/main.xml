@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SurfaceView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/preview"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-</SurfaceView>
+    <SurfaceView android:id="@+id/preview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"/>
+    <TextView android:id="@+id/vision"
+            android:text="Test"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:shadowColor="#000000"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="3"/>
+</RelativeLayout>

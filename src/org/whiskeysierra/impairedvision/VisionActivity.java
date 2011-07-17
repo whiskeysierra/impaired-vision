@@ -1,9 +1,6 @@
 package org.whiskeysierra.impairedvision;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
@@ -12,24 +9,25 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.*;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Iterables;
+import android.widget.TextView;
+import de.cosmocode.collections.MoreLists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public final class VisionActivity extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(VisionActivity.class);
 
-    private final int dialog = 0;
-
     private Camera camera;
     private SurfaceView preview;
     private SurfaceHolder holder;
     private Camera.Size size;
 
-    private final ImmutableList<Vision> visions = ImmutableList.of(
+    private int currentIndex;
+    private final List<Vision> visions = MoreLists.cycle(
             new NormalVision(),
             new Myopia(),
             new Protanopia(),
@@ -39,7 +37,7 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
             new AchromatopiaAndMyopia()
     );
 
-    private Vision current = visions.get(0);
+    private TextView currentName;
 
     private int[] rgb;
     private final Paint paint = new Paint();
@@ -68,18 +66,34 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
         configure(preferences);
 
         preview = (SurfaceView) findViewById(R.id.preview);
+        currentName = (TextView) findViewById(R.id.vision);
 
         holder = preview.getHolder();
         holder.addCallback(this);
 
-        preview.setOnClickListener(new View.OnClickListener() {
+        final SwipeDetector detector = new SwipeDetector(new SwipeListener(this));
+        preview.setOnTouchListener(detector);
+        // this is a noop implementation, but somehow required for the touch events to fire
+        preview.setOnClickListener(detector);
+    }
 
-            @Override
-            public void onClick(View view) {
-                showDialog(dialog);
-            }
+    void switchToPrevious() {
+        switchTo(currentIndex - 1);
+    }
 
-        });
+    void switchToNext() {
+        switchTo(currentIndex + 1);
+    }
+
+    private void switchTo(int index) {
+        currentIndex = index;
+        final Vision vision = visions.get(currentIndex);
+        if (camera != null) {
+            vision.configure(camera);
+        }
+        paint.setColorFilter(vision.getFilter());
+        currentName.setText(vision.getName());
+        LOG.debug("Switched to {}", vision);
     }
 
     @Override
@@ -113,7 +127,7 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
         if (camera != null) {
             preview.setWillNotDraw(false);
             camera.startPreview();
-            current.configure(camera);
+            switchTo(0);
             rgb = new int[size.width * size.height];
             camera.setPreviewCallback(this);
         }
@@ -131,39 +145,6 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
             camera.stopPreview();
             camera.release();
             camera = null;
-        }
-    }
-
-    @Override
-    protected Dialog onCreateDialog(int id) {
-        switch (id) {
-            case dialog: {
-                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                builder.setTitle("Choose vision");
-
-                final CharSequence[] items = Iterables.toArray(Iterables.transform(visions, Vision.NAME), CharSequence.class);
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int i) {
-                        final Vision selected = visions.get(i);
-
-                        if (current != selected) {
-                            current = visions.get(i);
-                            LOG.debug("Switched to {}", current);
-                            current.configure(camera);
-                            paint.setColorFilter(current.getFilter());
-                        }
-                    }
-
-                });
-
-                return builder.create();
-            }
-            default: {
-                return super.onCreateDialog(id);
-            }
         }
     }
 
