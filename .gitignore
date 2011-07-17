@@ -38,6 +38,7 @@ release.properties
 pom.xml.releaseBackup
 
 /target
+/local.properties
 /bin
 /out
 /gen
