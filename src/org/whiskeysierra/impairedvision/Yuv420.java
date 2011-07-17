@@ -2,7 +2,7 @@ package org.whiskeysierra.impairedvision;
 
 import com.google.common.base.Preconditions;
 
-class Yuv420 {
+final class Yuv420 {
 
     public static void decode(byte[] yuv, int[] rgb, int width, int height) {
         final int size = width * height;

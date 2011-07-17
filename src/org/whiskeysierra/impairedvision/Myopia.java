@@ -3,7 +3,7 @@ package org.whiskeysierra.impairedvision;
 import android.graphics.ColorFilter;
 import android.hardware.Camera;
 
-public class Myopia implements Vision {
+final class Myopia implements Vision {
 
     @Override
     public void configure(Camera camera) {

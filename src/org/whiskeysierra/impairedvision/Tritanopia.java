@@ -3,7 +3,7 @@ package org.whiskeysierra.impairedvision;
 import android.graphics.ColorFilter;
 import android.graphics.ColorMatrixColorFilter;
 
-public class Tritanopia extends AbstractVision {
+final class Tritanopia extends AbstractVision {
 
     private final ColorMatrixColorFilter filter = new ColorMatrixColorFilter(new float[]{
             0.95f, 0.05f, 0.0f, 0.0f, 0.0f,

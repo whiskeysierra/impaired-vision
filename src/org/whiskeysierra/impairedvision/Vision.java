@@ -4,7 +4,7 @@ import android.graphics.ColorFilter;
 import android.hardware.Camera;
 import com.google.common.base.Function;
 
-public interface Vision {
+interface Vision {
 
     public static final Function<Vision, String> NAME = new Function<Vision, String>() {
 

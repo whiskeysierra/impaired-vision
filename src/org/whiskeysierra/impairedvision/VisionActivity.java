@@ -4,22 +4,23 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
-import android.view.View;
-import android.view.WindowManager;
+import android.preference.PreferenceManager;
+import android.view.*;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ImpairedVision extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback {
+public final class VisionActivity extends Activity implements SurfaceHolder.Callback, Camera.PreviewCallback,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ImpairedVision.class);
+    private static final Logger LOG = LoggerFactory.getLogger(VisionActivity.class);
 
     private final int dialog = 0;
 
@@ -43,11 +44,28 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
     private int[] rgb;
     private final Paint paint = new Paint();
 
+    private boolean skipFrames;
+    private int skipBelow;
+    private int skipUntil;
+
+    private int frameCount;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
+        final Window window = getWindow();
+        window.requestFeature(Window.FEATURE_NO_TITLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         setContentView(R.layout.main);
+
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.registerOnSharedPreferenceChangeListener(this);
+
+        configure(preferences);
 
         preview = (SurfaceView) findViewById(R.id.preview);
 
@@ -62,6 +80,12 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
             }
 
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        OptionsMenu.createMenu(this, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -87,13 +111,11 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (camera != null) {
-            synchronized (this) {
-                preview.setWillNotDraw(false);
-                camera.startPreview();
-                current.configure(camera);
-                rgb = new int[size.width * size.height];
-                camera.setPreviewCallback(this);
-            }
+            preview.setWillNotDraw(false);
+            camera.startPreview();
+            current.configure(camera);
+            rgb = new int[size.width * size.height];
+            camera.setPreviewCallback(this);
         }
     }
 
@@ -147,19 +169,45 @@ public class ImpairedVision extends Activity implements SurfaceHolder.Callback, 
 
     @Override
     public void onPreviewFrame(byte[] yuv, Camera camera) {
-        if (holder == null) return;
+        if (holder != null) {
+            if (skipFrames) {
+                if (frameCount < skipBelow) {
+                    frameCount++;
+                    return;
+                } else if (frameCount >= skipUntil) {
+                    frameCount = 0;
+                    return;
+                }
+            }
 
-        Canvas canvas = null;
+            frameCount++;
 
-        try {
-            canvas = holder.lockCanvas(null);
-            Yuv420.decode(yuv, rgb, size.width, size.height);
-            canvas.drawBitmap(rgb, 0, size.width, 0, 0, size.width, size.height, false, paint);
-        } finally {
-            if (canvas != null) {
-                holder.unlockCanvasAndPost(canvas);
+            Canvas canvas = null;
+
+            try {
+                canvas = holder.lockCanvas(null);
+                Yuv420.decode(yuv, rgb, size.width, size.height);
+                canvas.drawBitmap(rgb, 0, size.width, 0, 0, size.width, size.height, false, paint);
+            } finally {
+                if (canvas != null) {
+                    holder.unlockCanvasAndPost(canvas);
+                }
             }
         }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences preferences, String s) {
+        configure(preferences);
+    }
+
+    private void configure(SharedPreferences preferences) {
+        skipFrames = preferences.getBoolean("skipFrames", false);
+
+        final int rate = Integer.parseInt(preferences.getString("skipRate", "25"));
+        final int divisor = MoreMath.gcd(rate, 100);
+        skipBelow = rate / divisor;
+        skipUntil = 100 / divisor;
     }
 
 }

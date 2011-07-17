@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest android:versionCode="1"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
           android:versionName="1.0"
-          package="org.whiskeysierra.impairedvision"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+          package="org.whiskeysierra.impairedvision">
 
-    <supports-screens android:largeScreens="false" android:normalScreens="true" android:smallScreens="false"/>
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <application android:icon="@drawable/icon" android:label="@string/app_name">
-        <activity android:configChanges="keyboardHidden|orientation"
-                  android:label="@string/app_name"
-                  android:name=".ImpairedVision"
-                  android:screenOrientation="landscape"
-                  android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+    <application android:icon="@drawable/icon" android:label="Impaired Vision">
+        <activity android:name="VisionActivity" android:label="Impaired Vision">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name="AboutActivity" android:label="About"/>
+        <activity android:name="SettingsActivity" android:label="Settings"/>
     </application>
+
+    <uses-feature android:name="android.hardware.camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 </manifest>

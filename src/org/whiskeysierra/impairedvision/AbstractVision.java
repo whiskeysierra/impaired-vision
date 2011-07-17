@@ -2,7 +2,7 @@ package org.whiskeysierra.impairedvision;
 
 import android.hardware.Camera;
 
-abstract class AbstractVision implements Vision{
+abstract class AbstractVision implements Vision {
 
     @Override
     public void configure(Camera camera) {
