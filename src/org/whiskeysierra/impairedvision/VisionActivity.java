@@ -35,8 +35,7 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
             new Protanopia(),
             new Deuteranopia(),
             new Tritanopia(),
-            new Achromatopia(),
-            new AchromatopiaAndMyopia()
+            new Achromatopia()
     );
 
     private TextView name;
