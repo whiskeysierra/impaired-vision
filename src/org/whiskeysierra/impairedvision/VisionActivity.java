@@ -24,6 +24,8 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
     private Camera camera;
     private SurfaceView preview;
     private SurfaceHolder holder;
+
+    private int sizeIndex;
     private Camera.Size size;
 
     private int currentIndex;
@@ -37,7 +39,7 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
             new AchromatopiaAndMyopia()
     );
 
-    private TextView currentName;
+    private TextView name;
 
     private int[] rgb;
     private final Paint paint = new Paint();
@@ -47,6 +49,10 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
     private int skipUntil;
 
     private int frameCount;
+
+    private float width;
+    private float height;
+    private float ratio;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +72,7 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
         configure(preferences);
 
         preview = (SurfaceView) findViewById(R.id.preview);
-        currentName = (TextView) findViewById(R.id.vision);
+        name = (TextView) findViewById(R.id.name);
 
         holder = preview.getHolder();
         holder.addCallback(this);
@@ -92,7 +98,7 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
             vision.configure(camera);
         }
         paint.setColorFilter(vision.getFilter());
-        currentName.setText(vision.getName());
+        name.setText(vision.getName());
         LOG.debug("Switched to {}", vision);
     }
 
@@ -107,7 +113,11 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
         super.onResume();
         if (camera == null) {
             camera = Camera.open();
-            size = camera.getParameters().getPreviewSize();
+            //size = camera.getParameters().getPreviewSize();
+            final Camera.Parameters parameters = camera.getParameters();
+            size = parameters.getSupportedPreviewSizes().get(sizeIndex);
+            parameters.setPreviewSize(size.width, size.height);
+            camera.setParameters(parameters);
         }
     }
 
@@ -128,14 +138,15 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
             preview.setWillNotDraw(false);
             camera.startPreview();
             switchTo(0);
-            rgb = new int[size.width * size.height];
             camera.setPreviewCallback(this);
         }
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
+        this.width = width;
+        this.height = height;
+        this.ratio = this.width / this.height;
     }
 
     @Override
@@ -167,8 +178,36 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
 
             try {
                 canvas = holder.lockCanvas(null);
+
+                if (rgb == null) {
+                    rgb = new int[size.width * size.height];
+                }
+
                 Yuv420.decode(yuv, rgb, size.width, size.height);
-                canvas.drawBitmap(rgb, 0, size.width, 0, 0, size.width, size.height, false, paint);
+
+                final float x;
+                final float y;
+
+                if (size.width < width && size.height < height) {
+                    final float bitmapRatio = (float) size.width / (float) size.height;
+
+                    if (bitmapRatio < ratio) {
+                        final float scale = height / (float) size.height;
+                        canvas.scale(scale, scale);
+                        x = 0;
+                        y = 0;
+                    } else {
+                        final float scale = width / (float) size.width;
+                        canvas.scale(scale, scale);
+                        x = 0;
+                        y = 0;
+                    }
+                } else {
+                    x = 0;
+                    y = 0;
+                }
+
+                canvas.drawBitmap(rgb, 0, size.width, x, y, size.width, size.height, false, paint);
             } finally {
                 if (canvas != null) {
                     holder.unlockCanvasAndPost(canvas);
@@ -183,9 +222,17 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
     }
 
     private void configure(SharedPreferences preferences) {
-        skipFrames = preferences.getBoolean("skipFrames", false);
+        final String index = preferences.getString("sizeIndex", getString(R.string.defaultSizeIndex));
 
-        final int rate = Integer.parseInt(preferences.getString("skipRate", "25"));
+        if (index != null) {
+            size = null;
+            sizeIndex = Integer.parseInt(index);
+            rgb = null;
+        }
+
+        skipFrames = preferences.getBoolean("skipFrames", Boolean.parseBoolean(getString(R.string.defaultSkipFrames)));
+
+        final int rate = Integer.parseInt(preferences.getString("skipRate", getString(R.string.defaultSkipRate)));
         final int divisor = MoreMath.gcd(rate, 100);
         skipBelow = rate / divisor;
         skipUntil = 100 / divisor;

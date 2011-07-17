@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="version">0.1.0-beta</string>
+    <string name="defaultSizeIndex">0</string>
+    <string name="defaultSkipFrames">false</string>
+    <string name="defaultSkipRate">25</string>
 </resources>

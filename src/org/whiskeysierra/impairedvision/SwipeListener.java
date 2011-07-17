@@ -22,14 +22,16 @@ public class SwipeListener extends GestureDetector.SimpleOnGestureListener {
     }
 
     @Override
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if (e1.getX() - e2.getX() > minimumDistance && Math.abs(velocityX) > minimumVelocity) {
+    public boolean onFling(MotionEvent a, MotionEvent b, float velocityX, float velocityY) {
+        if (a.getX() - b.getX() > minimumDistance && Math.abs(velocityX) > minimumVelocity) {
             activity.switchToNext();
-        } else if (e2.getX() - e1.getX() > minimumDistance && Math.abs(velocityX) > minimumVelocity) {
+            return true;
+        } else if (b.getX() - a.getX() > minimumDistance && Math.abs(velocityX) > minimumVelocity) {
             activity.switchToPrevious();
+            return true;
+        } else {
+            return false;
         }
-
-        return false;
     }
 
 }
