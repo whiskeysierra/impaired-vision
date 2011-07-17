@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          android:versionName="@string/version"
-          package="org.whiskeysierra.impairedvision">
+        android:versionName="@string/version"
+        package="org.whiskeysierra.impairedvision">
 
     <application android:icon="@drawable/icon" android:label="Impaired Vision">
         <activity android:name="VisionActivity" android:label="Impaired Vision">
