@@ -6,7 +6,8 @@
             android:summaryOff="All frames will be used"
             android:summaryOn="Some frames will be dropped"
             android:defaultValue="false"/>
-    <ListPreference key="skipRate"
+    <ListPreference
+            android:key="skipRate"
             android:title="Frame skipping rate"
             android:summary="The percentage of frames that will be skipped to improve performance"
             android:defaultValue="25"
