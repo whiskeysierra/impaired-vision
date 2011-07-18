@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.*;
 import android.widget.TextView;
-import de.cosmocode.collections.MoreLists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +28,7 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
     private Camera.Size size;
 
     private int currentIndex;
-    private final List<Vision> visions = MoreLists.cycle(
+    private final List<Vision> visions = new CyclingList<Vision>(
             new NormalVision(),
             new Myopia(),
             new Protanopia(),
@@ -112,7 +111,6 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
         super.onResume();
         if (camera == null) {
             camera = Camera.open();
-            //size = camera.getParameters().getPreviewSize();
             final Camera.Parameters parameters = camera.getParameters();
             size = parameters.getSupportedPreviewSizes().get(sizeIndex);
             parameters.setPreviewSize(size.width, size.height);
