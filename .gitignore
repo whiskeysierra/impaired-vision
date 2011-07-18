@@ -41,6 +41,7 @@ pom.xml.releaseBackup
 /local.properties
 /bin
 /out
+/*.apk
 /gen
 /latex/*-blx.bib
 /latex/*.aux
