@@ -48,6 +48,7 @@ pom.xml.releaseBackup
 /latex/*.blg
 /latex/*.fdb_latexmk
 /latex/*.lof
+/latex/*.lol
 /latex/*.mp
 /latex/*.out
 /latex/*.pdf

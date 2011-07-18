@@ -9,6 +9,8 @@
 \usepackage{subfigure}
 \usepackage[format=plain,labelfont=bf,up]{caption}
 \usepackage{hyperref}
+\usepackage{minted}
+\usemintedstyle{friendly}
 \bibliography{documentation.bib}
 \title{Impaired Vision \\ Ein Augmented-Reality-Simulator für Sehstörungen}
 \author{Willi Schönborn}
@@ -43,14 +45,14 @@ Das Ergebnis dieses Projektes sollte ein Anwendung für Mobiltelefone werden, di
 Insgesamt wurden fünf unterschiedliche Sehschwächen ausgewählt wobei der Schwerpunkt klar auf den Farbfehlsichtigkeiten liegt. Neben der klassischen Myopie, der Kurzsichtigkeit, sowie den drei Vertretern der Dichromasie, der teilweisen Farbblindheit \cite{WP-D} wird auch die Achromasie, die komplette Farbenblindheit, behandelt. Alle modifizierten Versionen der Beispielabbildungen in diesem Kapitel wurden mithilfe von Vischeck \cite{VISCHECK} erzeugt.
 
 \subsection*{Myopie}
-Kurzsichtigkeit oder Myopie bezeichnet man eine bestimmte Form von optischer Fehlsichtigkeit bei der ein Missverhältnis zwischen Baulänge und Brechkraft des Auges besteht. Das Ergebnis ist ein Abbildungsfehler, der weit entfernte Objekte unschärfer erscheinen lässt als nahe gelegene. Der Betroffene sieht also in der Ferne schlechter als in der Nähe \cite{WP-KS}. Abbildung \ref{myopia} verdeutlicht den Effekt anhand eines Fotos, das mit meinem Gauß-Filter modifiziert wurde. Die physikalische Grundlage ist hier nicht absolut korrekt, da bei der Kurzsichtigkeit natürlich die Entfernung eine große Rolle spielt, bei zunehmend großen Distanzen kann diese Tatsache jedoch vernachlässigt werden.
+Kurzsichtigkeit oder Myopie bezeichnet man eine bestimmte Form von optischer Fehlsichtigkeit bei der ein Missverhältnis zwischen Baulänge und Brechkraft des Auges besteht. Das Ergebnis ist ein Abbildungsfehler, der weit entfernte Objekte unschärfer erscheinen lässt als nahe gelegene. Der Betroffene sieht also in der Ferne schlechter als in der Nähe \cite{WP-KS}. Abbildung \ref{myopia} verdeutlicht den Effekt anhand eines Fotos, das mit meinem Gauß-Filter \cite{WP-GF} modifiziert wurde. Die physikalische Grundlage ist hier nicht absolut korrekt, da bei der Kurzsichtigkeit natürlich die Entfernung eine große Rolle spielt, bei zunehmend großen Distanzen kann diese Tatsache jedoch vernachlässigt werden.
 
 \begin{figure}[H]
 \centering
 \subfigure[Normalsichtigkeit]{
     \includegraphics[width=0.48\textwidth]{balloons.jpg}
 }
-\subfigure[Myopie (Kurzsichtigkeit)]{
+\subfigure[Myopie]{
     \includegraphics[width=0.48\textwidth]{balloons-myopia.jpg}
 }
 \caption{Myopie im Vergleich}
@@ -75,7 +77,7 @@ Protanopie, oder auch Rotblindheit, ist einer Art der Dichromasie, also eine Far
 \end{figure}
 
 \subsection*{Deuteranopie}
-Auch bei der Deuteranopie, oder Gründblindheit, handelt sich dabei um eine genetisch bedingte Farbfehlsichtigkeit Deuternaropen haben jedoch, im Gegensatz zu Protanopen, keine funktionsfähigen M-Zapfen da die Zapfen für das Wahrnehmen von Grün das Opsin für Rot enthalten \cite{WP-D}. Die Krankheitshäufigkeit von Deuteranopie liegt im selben Bereich wie die der Protanopie. Interessant ist die Tatsache, dass beide Krankheiten, sowohl die Rot- als auch die Grünblindheit, einen ausgesprochen ähnlichen visuellen Effekt ergeben. Betroffene können in beiden Fällen Rot- und Grüntöne der gleichen Helligkeit nicht mehr auseinanderhalten. Aus diesem Grund werden beide Krankheiten oft unter dem Begriff Rot-Grün-Sehschwäche zusammengefasst. Die Abbildung \ref{protanope} und \ref{deuteranope} zeigen die jeweiligen Symptome im direkten Vergleich mit der Normalsichtigkeit.
+Auch bei der Deuteranopie, oder Gründblindheit, handelt sich dabei um eine genetisch bedingte Farbfehlsichtigkeit Deuternaropen haben jedoch, im Gegensatz zu Protanopen, keine funktionsfähigen M-Zapfen da die Zapfen für das Wahrnehmen von Grün das Opsin für Rot enthalten \cite{WP-D}. Die Krankheitshäufigkeit von Deuteranopie liegt im selben Bereich wie die der Protanopie. Interessant ist die Tatsache, dass beide Krankheiten, sowohl die Rot- als auch die Grünblindheit, einen ausgesprochen ähnlichen visuellen Effekt ergeben. Betroffene können in beiden Fällen Rot- und Grüntöne der gleichen Helligkeit nicht mehr auseinanderhalten. Aus diesem Grund werden beide Krankheiten oft unter dem Begriff Rot-Grün-Sehschwäche \cite{WP-RG} zusammengefasst. Die Abbildung \ref{protanope} und \ref{deuteranope} zeigen die jeweiligen Symptome im direkten Vergleich mit der Normalsichtigkeit.
 
 \begin{figure}[H]
 \centering
@@ -124,17 +126,142 @@ Die Farbenblindheit, Achromatopsie oder Achromasie ist eine seltene Farbsinnstö
 \newpage
 
 \section*{Implementierung}
+Der Simulator wurde auf Basis der Android Plattform 2.3.3 entwickelt. Als Testgerät kam das \textit{Google Nexus S} zum Einsatz. Ein wichtiger Beweggrund für die Wahl der Plattform war die persönliche Vorliebe des Autors für die Programmiersprache Java sowie die überaus umfangreiche Dokumentation der Android API. Für die Implementierung der verschiedenen Sehstörungen waren  unterschiedliche Vorgehensweise nötig die in den folgenden Abschnitten genauer erklärt werden. Alle Bilder, die Ergebnisse bestimmter Effekte zeigen, sind ausschließlich mit dem entwickelten Simulator entstanden und wurden nachträglich in keiner Weise manipuliert.
+
+\subsection*{Kurzsichtigkeit}
+Die erste naive Idee Myopie zu simulieren war das Modifizieren des Kamerabildes mithilfe eines Gauß-Filters. Bei diesem Ansatz wird allerdings vernachlässigt, dass Betroffene in einem kleinen Bereich, abhängig der tatsächlichen Sehstärke, durchaus scharf sehen können. Aus diesem Grund wurde von diesem Ansatz Abstand genommen. Stattdessen wurde ein einfacheres und dennoch korrektes Verfahren implementiert: Kameras in Android-gestützten Mobiltelefonen verfügen über einen Auto-Fokus der jedoch programmatisch deaktiviert werden kann. Statt dem Auto-Fokus kann ein statischer Fokus festgelegt werden. Für die Simulation von Kurzsichtigkeit bietet sich hier natürlich der Makro-Fokus an. Diese Technik hat den Vorteil, dass Objekte die sich in kurzer Entfernung zum Betrachter befinden scharf gesehen werden können während mit zunehmender Entfernung Details nicht mehr wahrgenommen werden können. Leider ist der Makro-Fokus statisch, das heißt die Entfernung ab der Unschärfe zu sehen ist lässt sich nicht einstellen. Auf dem Testgerät war der visuelle Eindruck ausgesprochen nah an der tatsächlichen Sehstärke des Autors, die nach letzten Messungen im Bereich um 6,75 Dioptrin liegt. Listing \ref{macro-focus} zeigt die Aktivierung des Makro-Fokus mithilfe der Android-Klasse \texttt{android.hardware.Camera}.
+
+\begin{listing}[H]
+\begin{minted}{java}
+@Override
+public void configure(Camera camera) {
+    ...
+    final Camera.Parameters parameters = camera.getParameters();
+    parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
+    camera.setParameters(parameters);
+}
+\end{minted}
+\caption{Aktivierung des Makro-Fokus}
+\label{macro-focus}
+\end{listing}
+
+Abbildung \ref{simulated-myopia} zeigt das Ergebnis dieser Implementierung anhand eines Screenshots von der laufenden Anwendung der mit Mithilfe des Android Tools \textit{Dalvik Debug Monitor Server} erstellt wurde.
+
+\begin{figure}[H]
+\centering
+\subfigure[Normalsichtigkeit]{
+    \includegraphics[width=0.48\textwidth]{normal.png}
+}
+\subfigure[Myopie]{
+    \includegraphics[width=0.48\textwidth]{myopia.png}
+}
+\caption{Simulierte Kurzsichtigkeit}
+\label{simulated-myopia}
+\end{figure}
 
 \newpage
 
-\nocite{WP-RG}
-\nocite{WP-GF}
+\subsection*{Farbfehlsichtigkeiten}
+Im Gegensatz zur Kurzsichtigkeit wurden die restlichen Farbsehstörungen durch direkte Manipulation des Kamerabildes realisiert. Dazu muss eine Instanz der Schnittstelle \texttt{android.hardware.Camera.PreviewCallback}, wie in Listing \ref{preview-register} zu sehen ist, implementiert und bei der aktuellen \texttt{Camera} registriert werden.
+
+\begin{listing}[H]
+\begin{minted}{java}
+public class VisionActivity extends [...] implements Camera.PreviewCallback {
+
+    @Override
+    public void onPreviewFrame(byte[] frame) {
+        ...
+    }
+
+    ...
+    camera.setPreviewCallback(this);
+
+}
+\end{minted}
+\caption{Implementierung und Registrierung eines PreviewCallbacks}
+\label{preview-register}
+\end{listing}
+
+In der \texttt{onPreviewFrame}-Methode hat man nun Zugriff auf den aktuellen Frame in Form eines Byte-Arrays das die Bildinformationen im NV21-Byteformat enthält, einer Variante von YCbCr/YUV 4:2:0 wobei die beiden Farbanteile in der Reihenfolge vertauscht werden. Im ersten Schritt muss das Bild also in den RGB-Farbraum konvertiert werden. Dieser Schritt wurde mit dem Algorithmus von David Manpearl realisiert, der unter \cite{ANDROID-YUV} zu finden ist. Auf die entstandene RGB-Bitmap können nun Farbeffekte angewendet werden. Für diesen Zweck kommt die Android-Klasse \texttt{android.graphics.ColorMatrixColorFilter} zum Einsatz. Diese Filter werden als 5x4-Matrizen deklariert und definieren eine Abbildung zwischen den Farbwerten der eingehenden Pixel und der Ergebnisfarbe. Das folgende Listing \ref{matrix-protanopia} und die Abbildung \ref{simulated-protanopia} zeigen die Konfiguration eines \texttt{ColorMatrixColorFilter}s anhand der Protanopie sowie den erzeugten Effekt.
+
+\begin{listing}[H]
+\begin{minted}{java}
+new ColorMatrixColorFilter(new float[] {
+    0.567f, 0.433f, 0.0f, 0.0f, 0.0f,
+    0.558f, 0.442f, 0.0f, 0.0f, 0.0f,
+    0.0f, 0.242f, 0.758f, 0.0f, 0.0f,
+    0.0f, 0.0f, 0.0f, 1.0f, 0.0f,
+});
+\end{minted}
+\caption{Konfiguration eines ColorMatrixColorFilters}
+\label{matrix-protanopia}
+\end{listing}
+
+\begin{figure}[H]
+\centering
+\subfigure[Normalsichtigkeit]{
+    \includegraphics[width=0.48\textwidth]{normal.png}
+}
+\subfigure[Protanopie]{
+    \includegraphics[width=0.48\textwidth]{protanopia.png}
+}
+\caption{Simulierte Protanopie}
+\label{simulated-protanopia}
+\end{figure}
+
+Der Helligkeitsunterschied zwischen der Normalsichtigkeit und der Protanopie ist nicht bedingt durch den Farbfilter sondern durch die Tatsache, dass beide Bilder zu unterschiedlichen Tageszeiten aufgenommen wurden und dementsprechend der Grad an Sonneneinstrahlung unterschiedlich war.
+
+Die folgenden Abbildungen zeigen die simulierten Effekte für die restlichen Sehstörungen.
+
+\begin{figure}[H]
+\centering
+\subfigure[Normalsichtigkeit]{
+    \includegraphics[width=0.48\textwidth]{normal.png}
+}
+\subfigure[Deuteranopie]{
+    \includegraphics[width=0.48\textwidth]{deuteranopia.png}
+}
+\caption{Simulierte Deuteranopie}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\subfigure[Normalsichtigkeit]{
+    \includegraphics[width=0.48\textwidth]{normal.png}
+}
+\subfigure[Tritanopie]{
+    \includegraphics[width=0.48\textwidth]{tritanopia.png}
+}
+\caption{Simulierte Tritanopie}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\subfigure[Normalsichtigkeit]{
+    \includegraphics[width=0.48\textwidth]{normal.png}
+}
+\subfigure[Achromasie]{
+    \includegraphics[width=0.48\textwidth]{achromatopia.png}
+}
+\caption{Simulierte Achromasie}
+\end{figure}
+
+\newpage
+
+\subsection*{Geschwindigkeit und Optimierungen}
+Ohne zusätzliche Konfiguration haben eingehende Bilder der Kamera auf einem \textit{Google Nexus S} eine Auflösung von 720x480 Pixel bei Framerate von 15 - 30 fps.
+
+\newpage
+
 \nocite{ANDROID}
 \nocite{GIZMODO}
 \nocite{IBFB}
 \printbibliography
 
 \listoffigures
+
+\renewcommand\listoflistingscaption{Quellcodeverzeichnis}
+\listoflistings
 
 \end{document}
 
