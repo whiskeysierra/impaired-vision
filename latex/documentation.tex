@@ -135,7 +135,6 @@ Die erste naive Idee Myopie zu simulieren war das Modifizieren des Kamerabildes 
 \begin{minted}{java}
 @Override
 public void configure(Camera camera) {
-    ...
     final Camera.Parameters parameters = camera.getParameters();
     parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_MACRO);
     camera.setParameters(parameters);
@@ -166,16 +165,14 @@ Im Gegensatz zur Kurzsichtigkeit wurden die restlichen Farbsehstörungen durch d
 
 \begin{listing}[H]
 \begin{minted}{java}
-public class VisionActivity extends [...] implements Camera.PreviewCallback {
+@Override
+public void onPreviewFrame(byte[] frame) {
+     ...
+}
 
-    @Override
-    public void onPreviewFrame(byte[] frame) {
-        ...
-    }
-
-    ...
+@Override
+public void surfaceCreated(SurfaceHolder holder) {
     camera.setPreviewCallback(this);
-
 }
 \end{minted}
 \caption{Implementierung und Registrierung eines PreviewCallbacks}
