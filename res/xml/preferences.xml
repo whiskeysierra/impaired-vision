@@ -3,18 +3,17 @@
     <ListPreference
             android:key="sizeIndex"
             android:title="Preview resolution"
-            android:summary="Change to improve performance"
+            android:summary="Reduce to improve performance"
             android:defaultValue="@string/defaultSizeIndex"/>
     <CheckBoxPreference
             android:key="skipFrames"
-            android:title="Enable frame skipping"
-            android:summaryOff="All frames will be used"
-            android:summaryOn="Some frames will be dropped"
+            android:title="Frame skipping"
+            android:summary="Skip frames to improve performance"
             android:defaultValue="@string/defaultSkipFrames"/>
     <ListPreference
             android:key="skipRate"
             android:title="Frame skipping rate"
-            android:summary="The percentage of frames that will be skipped to improve performance"
+            android:summary="The percentage of frames to skipped"
             android:defaultValue="@string/defaultSkipRate"
             android:entries="@array/skipRates"
             android:entryValues="@array/skipRateValues"
