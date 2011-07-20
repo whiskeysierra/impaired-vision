@@ -1,21 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference
-            android:key="sizeIndex"
-            android:title="Preview resolution"
-            android:summary="Reduce to improve performance"
-            android:defaultValue="@string/defaultSizeIndex"/>
-    <CheckBoxPreference
-            android:key="skipFrames"
-            android:title="Frame skipping"
-            android:summary="Skip frames to improve performance"
-            android:defaultValue="@string/defaultSkipFrames"/>
-    <ListPreference
-            android:key="skipRate"
-            android:title="Frame skipping rate"
-            android:summary="The percentage of frames to skipped"
-            android:defaultValue="@string/defaultSkipRate"
-            android:entries="@array/skipRates"
-            android:entryValues="@array/skipRateValues"
-            android:dependency="skipFrames"/>
+    <PreferenceCategory android:title="Performance">
+        <ListPreference
+                android:key="sizeIndex"
+                android:title="Preview resolution"
+                android:summary="Reduce to improve performance"
+                android:defaultValue="@string/defaultSizeIndex"/>
+        <CheckBoxPreference
+                android:key="skipFrames"
+                android:title="Frame skipping"
+                android:summary="Skip frames to improve performance"
+                android:defaultValue="@string/defaultSkipFrames"/>
+        <ListPreference
+                android:key="skipRate"
+                android:title="Frame skipping rate"
+                android:summary="The percentage of frames to skip"
+                android:defaultValue="@string/defaultSkipRate"
+                android:entries="@array/skipRates"
+                android:entryValues="@array/skipRateValues"
+                android:dependency="skipFrames"/>
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Presentation">
+        <CheckBoxPreference
+                android:key="displayName"
+                android:title="Display vision's name"
+                android:summaryOn="Selected vision's name will be displayed"
+                android:summaryOff="Selected vision's name will be hidden"
+                android:defaultValue="true"/>
+    </PreferenceCategory>
 </PreferenceScreen>

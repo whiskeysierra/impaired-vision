@@ -67,10 +67,10 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
         final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences.registerOnSharedPreferenceChangeListener(this);
 
-        configure(preferences);
-
         preview = (SurfaceView) findViewById(R.id.preview);
         name = (TextView) findViewById(R.id.name);
+
+        configure(preferences);
 
         holder = preview.getHolder();
         holder.addCallback(this);
@@ -233,6 +233,12 @@ public final class VisionActivity extends Activity implements SurfaceHolder.Call
         final int divisor = MoreMath.gcd(rate, 100);
         skipBelow = rate / divisor;
         skipUntil = 100 / divisor;
+
+        if (preferences.getBoolean("displayName", Boolean.parseBoolean(getString(R.string.defaultDisplayName)))) {
+            name.setVisibility(View.VISIBLE);
+        } else {
+            name.setVisibility(View.INVISIBLE);
+        }
     }
 
 }
