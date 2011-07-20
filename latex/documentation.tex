@@ -252,21 +252,46 @@ Ohne zusätzliche Konfiguration haben eingehende Bilder der Kamera auf einem \te
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth, trim=0 0 0 39, clip=true]{settings.png}
+\includegraphics[width=0.7\textwidth, trim=0 0 0 39, clip=true]{settings-landscape.png}
 \caption{Einstellungen}
 \label{settings}
 \end{figure}
 
-Damit nicht zuviel Rechenzeit genutzt wird um jeden Frame zu modifizieren wurde die Möglichkeit des \textit{Frame Skipping}s eingebaut. Die Grundidee dabei ist, einzelne Frames nach einem bestimmten Muster zu verwerfen. Über die Einstellungen des Simulators lässt sich dieses Feature an- und abschalten. Zusätzlich ist es möglich die gewünschte Prozentzahl an Frames festzulegen die verworfen werden sollen. Bei beispielsweise 75\% wird nur jeder vierte Frame tatsächlich verarbeitet und gezeichnet. Das schont das System sorgt aber auch dafür, dass statt einer flüssigen Echtzeit-Vorschau der Eindruck entseht, dass nur Schnappschüsse der Umgebung gemacht werden.
-
-Eine andere Möglichtkeit sowohl die Resourcen zu schonen als auch das interaktive Erlebnis zu verbessen ist das Verringern der Auflösung der Kamera-Vorschau. Jedes Android-Telefon hat eine bestimmte, fest definierte Auswahl an unterstützten Auflösungen, die sich ebenfalls über die Einstellungen des Simulators auswählen lassen. Kleinere Auflösungen werden hier auf die Größe des Bildschirms skaliert wobei jedoch das Seitenverhältnis stehts beibehalten wird. Dadurch entstehen gegebenenfalls schwarze Balken am Rand. Hier liegt es in der Hand des Benutzers einen akzeptablen Kompromiss zwischen Darstellungsqualität und Geschwindigkeit zu finden. Abbildung \ref{resolutions} zeigt die Auswahl der gewünschten Auflösung.
+Damit nicht zuviel Rechenzeit genutzt wird um jeden Frame zu modifizieren wurde die Möglichkeit des \textit{Frame Skipping}s eingebaut. Die Grundidee dabei ist, einzelne Frames nach einem bestimmten Muster zu verwerfen. Über die Einstellungen des Simulators lässt sich dieses Feature an- und abschalten. Zusätzlich ist es möglich die gewünschte Prozentzahl an Frames festzulegen die verworfen werden sollen. Bei beispielsweise 75\% wird nur jeder vierte Frame tatsächlich verarbeitet und gezeichnet. Das schont das System sorgt aber auch dafür, dass statt einer flüssigen Echtzeit-Vorschau der Eindruck entseht, dass nur Schnappschüsse der Umgebung gemacht werden. Abbildung \ref{skiprate} zeigt die Auswahl der \textit{Frame skipping rate}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth, trim=0 0 0 39, clip=true]{resolutions.png}
+\includegraphics[width=0.7\textwidth, trim=0 0 0 39, clip=true]{skiprate-landscape.png}
+\caption{Frame Skipping Einstellungen}
+\label{skiprate}
+\end{figure}
+
+\newpage
+
+Eine andere Möglichtkeit sowohl die Resourcen zu schonen als auch das interaktive Erlebnis zu verbessen ist das Verringern der Auflösung der Kamera-Vorschau. Jedes Android-Telefon hat eine bestimmte, fest definierte Auswahl an unterstützten Auflösungen, die sich ebenfalls über die Einstellungen des Simulators auswählen lassen. Kleinere Auflösungen werden hier auf die Größe des Bildschirms skaliert wobei jedoch das Seitenverhältnis stehts beibehalten wird. Dadurch entstehen gegebenenfalls schwarze Balken am Rand. In der folgenden Abbildung sind zwei verschiedene Auflösungen im direkten Vergleich zu sehen.
+
+\begin{figure}[H]
+\centering
+\subfigure[720 x 480 Pixel]{
+    \includegraphics[width=0.48\textwidth]{normal.png}
+}
+\subfigure[352 x 288 Pixel]{
+    \includegraphics[width=0.48\textwidth]{normal-lowres.png}
+}
+\caption{Auflösungen im Vergleich}
+\end{figure}
+
+Durch die Auswahl der gewünschten Auflösung, wie in Abbildung \ref{resolutions} zu sehen, erlaubt dem Benutzer des Simulators einen für ihn akzeptablen Kompromiss zwischen Darstellungsqualität und Geschwindigkeit zu finden.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth, trim=0 0 0 39, clip=true]{resolutions-landscape.png}
 \caption{Auflösungen}
 \label{resolutions}
 \end{figure}
+
+\subsection*{Installation}
+Bis der Simulator im Android Market \cite{ANDROID-MARKET} verfügbar ist kann man ihn über die URL \url{https://github.com/downloads/whiskeysierra/impaired-vision/impaired-vision.apk} herunterladen und manuell installieren. 
 
 \newpage
 
